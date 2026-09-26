@@ -1,7 +1,9 @@
 package id.ac.polinema.lumajang.portalku.prodi;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import id.ac.polinema.lumajang.portalku.kurikulum.Kurikulum;
+import id.ac.polinema.lumajang.portalku.pengumuman.Pengumuman;
 
 @Entity
 @Table(name = "program_studi")
@@ -42,6 +45,9 @@ public class Prodi {
         fetch = FetchType.LAZY
     )
     private List<Kurikulum> daftarKurikulum = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "targetProdi", fetch = FetchType.LAZY)
+    private Set<Pengumuman> daftarPengumuman = new HashSet<>();
 
     public void tambahKurikulum(Kurikulum kurikulum) {
         daftarKurikulum.add(kurikulum);
