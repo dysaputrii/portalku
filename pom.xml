@@ -5,6 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Spring Boot -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -12,6 +13,7 @@
         <relativePath/>
     </parent>
 
+    <!-- Project Information -->
     <groupId>id.ac.polinema.lumajang</groupId>
     <artifactId>portalku</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -19,6 +21,7 @@
     <name>portalku</name>
     <description>Demo project for Spring Boot</description>
 
+    <!-- Java Version -->
     <properties>
         <java.version>21</java.version>
     </properties>
@@ -76,6 +79,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- OpenAPI / Swagger UI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -85,12 +95,16 @@
 
     </dependencies>
 
+    <!-- Build -->
     <build>
         <plugins>
+
+            <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
         </plugins>
     </build>
 

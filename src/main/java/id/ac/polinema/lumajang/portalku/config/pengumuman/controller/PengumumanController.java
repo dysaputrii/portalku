@@ -5,6 +5,9 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,16 +37,40 @@ public class PengumumanController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "Menampilkan semua pengumuman",
+            description = "Mengambil seluruh data pengumuman yang tersedia."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Data pengumuman berhasil diambil"
+    )
     public List<PengumumanRingkasResponse> semua() {
         return pengumumanService.cariSemua();
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Menampilkan satu pengumuman",
+            description = "Mengambil data pengumuman berdasarkan ID."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Data pengumuman berhasil ditemukan"
+    )
     public PengumumanResponse satu(@PathVariable Integer id) {
         return pengumumanService.cariSatu(id);
     }
 
     @PostMapping
+    @Operation(
+            summary = "Menambahkan pengumuman",
+            description = "Menambahkan data pengumuman baru ke dalam sistem."
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Data pengumuman berhasil ditambahkan"
+    )
     public ResponseEntity<PengumumanResponse> tambah(
             @Valid @RequestBody PengumumanRequest req) {
 
@@ -61,6 +88,14 @@ public class PengumumanController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Mengubah pengumuman",
+            description = "Mengubah data pengumuman berdasarkan ID."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Data pengumuman berhasil diubah"
+    )
     public PengumumanResponse ubah(
             @PathVariable Integer id,
             @Valid @RequestBody PengumumanRequest req) {
@@ -69,6 +104,14 @@ public class PengumumanController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Menghapus pengumuman",
+            description = "Menghapus data pengumuman berdasarkan ID."
+    )
+    @ApiResponse(
+            responseCode = "204",
+            description = "Data pengumuman berhasil dihapus"
+    )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void hapus(@PathVariable Integer id) {
         pengumumanService.hapus(id);
