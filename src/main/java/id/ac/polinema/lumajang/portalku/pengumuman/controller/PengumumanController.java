@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import id.ac.polinema.lumajang.portalku.config.lampiran.Lampiran;
+import id.ac.polinema.lumajang.portalku.config.lampiran.LampiranMapper;
+import id.ac.polinema.lumajang.portalku.config.lampiran.LampiranRequest;
+import id.ac.polinema.lumajang.portalku.config.lampiran.LampiranResponse;
+import id.ac.polinema.lumajang.portalku.config.lampiran.LampiranService;
 
 import id.ac.polinema.lumajang.portalku.pengumuman.dto.PengumumanRequest;
 import id.ac.polinema.lumajang.portalku.pengumuman.dto.PengumumanResponse;
@@ -31,9 +38,17 @@ import id.ac.polinema.lumajang.portalku.pengumuman.service.PengumumanService;
 public class PengumumanController {
 
     private final PengumumanService pengumumanService;
+    private final LampiranService lampiranService;
+    private final LampiranMapper lampiranMapper;
 
-    public PengumumanController(PengumumanService pengumumanService) {
+    public PengumumanController(
+            PengumumanService pengumumanService,
+            LampiranService lampiranService,
+            LampiranMapper lampiranMapper) {
+
         this.pengumumanService = pengumumanService;
+        this.lampiranService = lampiranService;
+        this.lampiranMapper = lampiranMapper;
     }
 
     @GetMapping
@@ -62,6 +77,77 @@ public class PengumumanController {
         return pengumumanService.cariSatu(id);
     }
 
+    @GetMapping("/{id}/lampiran")
+    @Operation(
+            summary = "Menampilkan lampiran pengumuman",
+            description = "Mengambil seluruh lampiran yang dimiliki oleh pengumuman berdasarkan ID."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Data lampiran berhasil diambil"
+    )
+    public List<LampiranResponse> semuaLampiran(
+            @PathVariable Integer id) {
+
+        return lampiranService
+                .cariBerdasarkanPengumuman(id)
+                .stream()
+                .map(lampiranMapper::toResponse)
+                .toList();
+    }
+
+    @PostMapping("/{id}/lampiran")
+    @Operation(
+            summary = "Menambahkan lampiran pengumuman",
+            description = "Menambahkan lampiran baru pada pengumuman berdasarkan ID."
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Lampiran berhasil ditambahkan"
+    )
+    public ResponseEntity<LampiranResponse> tambahLampiran(
+            @PathVariable Integer id,
+            @Valid @RequestBody LampiranRequest req) {
+
+        Lampiran lampiran = lampiranMapper.toEntity(req);
+
+        lampiran.setPengumuman(
+                pengumumanService.cariEntity(id)
+        );
+
+        Lampiran hasil = lampiranService.tambah(lampiran);
+
+        LampiranResponse response =
+                lampiranMapper.toResponse(hasil);
+
+        URI lokasi = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(hasil.getId())
+                .toUri();
+
+        return ResponseEntity
+                .created(lokasi)
+                .body(response);
+    }
+
+    @PatchMapping("/{id}/dilihat")
+    @Operation(
+            summary = "Menambah jumlah dilihat pengumuman",
+            description = "Menaikkan jumlah dilihat pengumuman sebanyak satu. Endpoint menggunakan PATCH karena operasi ini mengubah data pada server, sehingga tidak boleh menggunakan GET."
+    )
+    @ApiResponse(
+            responseCode = "204",
+            description = "Jumlah dilihat berhasil ditambahkan"
+    )
+    public ResponseEntity<Void> tambahDilihat(
+            @PathVariable Integer id) {
+
+        pengumumanService.tambahDilihat(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping
     @Operation(
             summary = "Menambahkan pengumuman",
@@ -74,7 +160,8 @@ public class PengumumanController {
     public ResponseEntity<PengumumanResponse> tambah(
             @Valid @RequestBody PengumumanRequest req) {
 
-        PengumumanResponse hasil = pengumumanService.tambah(req);
+        PengumumanResponse hasil =
+                pengumumanService.tambah(req);
 
         URI lokasi = ServletUriComponentsBuilder
                 .fromCurrentRequest()

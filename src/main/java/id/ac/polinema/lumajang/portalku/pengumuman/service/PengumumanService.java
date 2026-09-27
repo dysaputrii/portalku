@@ -44,6 +44,19 @@ public class PengumumanService {
         return mapper.keResponse(ambilAtauGagal(id));
     }
 
+    public Pengumuman cariEntity(Integer id) {
+        return ambilAtauGagal(id);
+    }
+
+    @Transactional
+    public void tambahDilihat(Integer id) {
+        if (!pengumumanRepository.existsById(id)) {
+            throw new PengumumanTidakDitemukanException(id);
+        }
+
+        pengumumanRepository.tambahJumlahDilihat(id);
+    }
+
     @Transactional
     public PengumumanResponse tambah(PengumumanRequest req) {
         Kategori kategori = kategoriRepository.findById(req.idKategori())

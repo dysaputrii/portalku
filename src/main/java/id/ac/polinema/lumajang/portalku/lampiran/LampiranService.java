@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import id.ac.polinema.lumajang.portalku.config.lampiran.Lampiran;
-
 @Service
 @Transactional(readOnly = true)
 public class LampiranService {
@@ -19,6 +17,10 @@ public class LampiranService {
 
     public List<Lampiran> cariSemua() {
         return lampiranRepository.findAll();
+    }
+
+    public List<Lampiran> cariBerdasarkanPengumuman(Integer idPengumuman) {
+        return lampiranRepository.findByPengumumanId(idPengumuman);
     }
 
     public Lampiran cariSatu(Integer id) {
