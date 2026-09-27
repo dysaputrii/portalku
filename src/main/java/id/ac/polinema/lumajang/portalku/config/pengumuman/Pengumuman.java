@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import id.ac.polinema.lumajang.portalku.kategori.Kategori;
-import id.ac.polinema.lumajang.portalku.lampiran.Lampiran;
+import id.ac.polinema.lumajang.portalku.config.lampiran.Lampiran;
 import id.ac.polinema.lumajang.portalku.prodi.Prodi;
 
 @Entity
