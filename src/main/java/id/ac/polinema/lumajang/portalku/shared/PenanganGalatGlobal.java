@@ -15,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class PenanganGalatGlobal {
@@ -113,6 +114,26 @@ public class PenanganGalatGlobal {
 
         p.setTitle("Data bentrok");
         p.setType(URI.create(DASAR + "bentrok"));
+        p.setProperty("waktu", Instant.now());
+
+        return p;
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ProblemDetail statusPermintaan(
+            ResponseStatusException ex) {
+
+        HttpStatus status = HttpStatus.valueOf(
+                ex.getStatusCode().value());
+
+        ProblemDetail p = ProblemDetail.forStatusAndDetail(
+                status,
+                ex.getReason() != null
+                        ? ex.getReason()
+                        : "Permintaan tidak dapat diproses.");
+
+        p.setTitle("Permintaan tidak valid");
+        p.setType(URI.create(DASAR + "permintaan-salah"));
         p.setProperty("waktu", Instant.now());
 
         return p;
