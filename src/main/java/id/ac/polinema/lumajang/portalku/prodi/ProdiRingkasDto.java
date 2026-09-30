@@ -1,4 +1,4 @@
-package id.ac.polinema.lumajang.portalku.config.prodi;
+package id.ac.polinema.lumajang.portalku.prodi;
 
 import id.ac.polinema.lumajang.portalku.prodi.Prodi;
 

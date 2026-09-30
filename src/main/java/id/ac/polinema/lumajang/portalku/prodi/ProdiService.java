@@ -1,4 +1,4 @@
-package id.ac.polinema.lumajang.portalku.config.prodi;
+package id.ac.polinema.lumajang.portalku.prodi;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

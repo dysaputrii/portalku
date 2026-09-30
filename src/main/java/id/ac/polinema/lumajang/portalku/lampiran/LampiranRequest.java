@@ -1,4 +1,4 @@
-package id.ac.polinema.lumajang.portalku.config.lampiran;
+package id.ac.polinema.lumajang.portalku.lampiran;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

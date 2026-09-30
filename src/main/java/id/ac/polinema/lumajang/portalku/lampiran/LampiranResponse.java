@@ -1,4 +1,4 @@
-package id.ac.polinema.lumajang.portalku.config.lampiran;
+package id.ac.polinema.lumajang.portalku.lampiran;
 
 public record LampiranResponse(
         Integer id,
